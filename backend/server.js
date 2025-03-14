@@ -1,23 +1,27 @@
 const express = require('express');
 require('dotenv').config();
+const mongoose = require('mongoose');
+const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
 
 const app = express();
 const port = 5000;
-const mongoose = require('mongoose'); 
-const vendorRoute = require('./Routes/vendorRoute');
 
+// Connect to MongoDB
 mongoose
-.connect(process.env.MONGO_URL)
-.then(() => console.log('DB connected'))
-.catch((err)=>console.log('DB not connected'))
-// Sample route
-//app.get('/', (req, res) => {
-//  res.send('Hello, World!');
-//});
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log('DB connected'))
+  .catch((err) => console.log('DB connection failed', err));
 
-app.use(express.json());  // Ensure you can parse JSON request bodies
+// Middleware to parse incoming JSON data
+app.use(express.json());
 
-app.use('/api/vendor', vendorRoute);
+// Use the vendor route
+app.use('/api/vendor', VendorsRouting);
+
+// Test route to check if server is working
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
 
 // Start the server
 app.listen(port, () => {
