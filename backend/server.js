@@ -8,9 +8,13 @@ const port = 5000;
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log('DB connected'))
-  .catch((err) => console.log('DB connection failed', err));
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    family: 4, // Forces MongoDB to use IPv4
+  })
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.log("DB connection failed", err));
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
