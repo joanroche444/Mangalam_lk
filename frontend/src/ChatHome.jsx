@@ -31,6 +31,7 @@ const ChatHome = () => {
 
   return (
     <>
+  
       {/* Bot Icon */}
       <div
         onClick={() => setIsOpen(!isOpen)}

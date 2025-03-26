@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
@@ -14,7 +15,7 @@ mongoose
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
-
+app.use(cors());
 // Use the vendor route
 app.use('/api/vendor', VendorsRouting);
 

@@ -12,17 +12,16 @@ const getVendors = async (req, res) => {
 
 // Add a new vendor
 const addVendor = async (req, res) => {
-  const { email, service_type, price, quantity } = req.body;
+  const { email, service_name, service_type, description, price, what_we_provide } = req.body;
+
 
   // Validate the required fields
-  if (!email || !service_type || !price || !quantity) {
+  if (!email || !service_name || !service_type || !description || !price || !what_we_provide) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
   try {
-    const newVendor = new Vendor({ email, service_type, price, quantity });
-
-    // Save the new vendor to the database
+    const newVendor = new Vendor({ email, service_name, service_type, description, price, what_we_provide });
     await newVendor.save();
 
     // Respond with success message
@@ -32,8 +31,31 @@ const addVendor = async (req, res) => {
   }
 };
 
+const updateVendor = async (req, res) => {
+  try {
+    const updatedVendor = await Vendor.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // Ensures the returned document is the updated one
+    );
+
+    if (!updatedVendor) {
+      return res.status(404).json({ message: 'Vendor not found' });
+    }
+
+    res.status(200).json({
+      message: 'Vendor updated successfully',
+      vendor: updatedVendor
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
 // Export the controller functions
 module.exports = {
   getVendors,
   addVendor,
+  updateVendor
 };
