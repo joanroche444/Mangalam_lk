@@ -26,11 +26,11 @@ const AddService = () => {
           <h2 className="text-2xl font-bold text-center mb-4 font-serif italic">Add Your Service</h2>
           <form>
             <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Email</label>
+              <label className="block text-sm font-medium mb-2">Service Name</label>
               <input
                 type="email"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EBD4C8]"
-                placeholder="Enter your email"
+                placeholder="Enter your Service"
               />
             </div>
             <div className="mb-6">

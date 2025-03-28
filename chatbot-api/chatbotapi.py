@@ -18,7 +18,7 @@ faq_responses = {
     "photography services": "Yes, we offer photography services for your wedding. Would you like to book one?",
     "music services": "Yes, we provide music services to suit your wedding theme.",
     "catering services": "Yes, we offer catering services with a variety of menus.",
-    "cake": "Yes, we offer custom wedding cakes tailored to your preferences. What kind of cake would you like?"
+   "cake": 'We offer cakes! .1  Go to the services section: <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Click here to select the service you want</a> filter with cake option if you find your vendor add that to project'
 }
 
 def answer_question(question, context):
@@ -60,26 +60,7 @@ def ask():
     # Default context (You can modify this based on your app)
     context = """
     Mangalam is an online wedding planning platform where everything is in one place. 
-    There is no physical location, but couples can plan their entire wedding online. 
-    guest can update their RSVP 
-    -can select their preffered venue based on location
-    It offers 3 wedding decoration styles:
-    1. Victorian Era
-    2. Modern Era
-    3. Royal Era
-
-    - Book services like photography, music, catering, stage for dance, and wedding cakes.
-    - Manage and update their guest list on their personalized online dashboard.
-    - Receive reminders and updates for their wedding events and services directly through the platform.
-    
-    If you are wondering about specific services:
-    - Yes, you can make a account and book your wedding
-    - Yes, we offer services like photography, music ,decoration,food
-    - Yes, we offer photography services for your wedding.
-    - Yes, we provide music services to suit your wedding theme.
-    - Yes, we offer catering services with a variety of menus.
-    - Yes, we offer a stage for dance and live entertainment options.
-    - Yes, we offer custom wedding cakes tailored to your preferences.
+    wedding service section is the section where all the vendors for mangalam is available ,services is there so a couple can pick there prefered vendor 
     """
     
     # If it's the first request, greet the user

@@ -6,6 +6,7 @@ import ChatHome from './ChatHome';
 import VendorHome from './VendorHome';
 import AddService from './AddService';
 import AllServices from './AllServices';
+import ServiceDash from './ServiceDash';
 function App() {
   return (
     <Router>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/home2" element={<VendorHome />} />
         <Route path="/AddService" element={<AddService />} />
         <Route path="/AllService" element={<AllServices />} />
+        <Route path="/servdash" element={<ServiceDash />} />
       </Routes>
     </Router>
   );

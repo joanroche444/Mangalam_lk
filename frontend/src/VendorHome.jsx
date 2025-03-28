@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../Component/Sidebar';
-import Navbar from '../Component/Navbar';
+
 
 function VendorHome() {
   return (
