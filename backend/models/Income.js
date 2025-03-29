@@ -2,7 +2,8 @@ const mongoose = require ("mongoose");
 //const { applyTimestamps } = require("./Vendors");
 
 const IncomeSchema = new mongoose.Schema({
-    userId: {type:mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+    //userId: {type:mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+    userId: {type:String},
     icon: {type:String},
     source: {type: String, required: true}, //ex salary
     amount: {type:Number, required:true},

@@ -4,7 +4,7 @@ const {
     getAllExpense,
     deleteExpense,
     downloadExpenseExcel
-} = require("../controllers/expenseContoller");
+} = require("../controllers/expenseController");
 //const {protect} = require("../middleware//authMiddleware");
 
 const router = express.Router();

@@ -4,8 +4,10 @@ const mongoose = require('mongoose');
 const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
 const IncomeRoutes = require("./Routes/incomeRoutes");
 const ExpenseRoutes = require("./Routes/expenseRoutes");
+const DashboardRoutes = require("./Routes/dashboardRoutes");
 const app = express();
 const port = 5000;
+
 
 // Connect to MongoDB
 mongoose
@@ -23,7 +25,8 @@ app.use(express.json());
 // Use the vendor route
 app.use('/api/vendor', VendorsRouting);
 app.use('/api/income', IncomeRoutes);
-app.use('api/expense', ExpenseRoutes);
+app.use('/api/expense', ExpenseRoutes);
+app.use('/api/dashboard', DashboardRoutes);
 // Test route to check if server is working
 app.get('/', (req, res) => {
   res.send('Server is running!');
