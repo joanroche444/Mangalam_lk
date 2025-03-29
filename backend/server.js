@@ -1,7 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
+const VendorsRouting = require('./Routes/VendorsRouting'); 
+const userRoutes = require('./Routes/userRoutes')// Adjust the path to your route
 
 const app = express();
 const port = 5000;
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // Use the vendor route
 app.use('/api/vendor', VendorsRouting);
+app.use('/api/user', userRoutes); // Use the user route
 
 // Test route to check if server is working
 app.get('/', (req, res) => {

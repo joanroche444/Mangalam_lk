@@ -3,13 +3,14 @@ import React from 'react';
 import Navbar from './components/Navbar';
 
 import Herosectionlogo from './assets/herosection.jpeg'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious, } from './components/ui/Carousel';
 import Testimonial from './components/ui/Testimonial';
+import Footer from './components/Footer'
 
 
 
@@ -36,7 +37,12 @@ const Mangalam = () => {
             <p className='text-xl text-white mb-8 max-w-2xl'>
                 Everything you need to organize your special day, all in one place.
             </p>
-            
+            <Link
+                    to="/signup"
+                    className="bg-[#b06a5d] text-white py-2 px-4 rounded-lg font-semibold hover:bg-[#8d5347] transition duration-300"
+                  >
+                    Get Started
+                  </Link>
 
         </div>
      </section>
@@ -130,6 +136,23 @@ const Mangalam = () => {
           </Carousel>
         </div>
       </section>
+      
+    <section className="py-8 px-6 bg-[#b06a5d] text-center">
+        <div className="container mx-auto max-w-4xl">
+    <h2 className="text-white text-3xl font-bold  mb-6">
+      Why Plan Your Wedding with Us?
+    </h2>
+    <p className="text-white text-lg mb-8">
+      We provide all the tools you need to create the perfect wedding, stress-free!
+    </p>
+   <Link to={'/signup'}>
+    <button className="mt-8 bg-white text-[#b06a5d] px-6 py-3 rounded-md text-lg hover:bg-gray-100 transition">
+      Start Planning Now
+    </button>
+    </Link>
+  </div>  
+</section>
+      <Footer />  
     </div>
   );
 };
