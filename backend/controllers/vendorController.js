@@ -12,24 +12,50 @@ const getVendors = async (req, res) => {
 
 // Add a new vendor
 const addVendor = async (req, res) => {
-  const { email, service_name, service_type, description, price, what_we_provide } = req.body;
-
-
-  // Validate the required fields
-  if (!email || !service_name || !service_type || !description || !price || !what_we_provide) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
   try {
-    const newVendor = new Vendor({ email, service_name, service_type, description, price, what_we_provide });
-    await newVendor.save();
+    const { service_name, service_type, description, what_we_provide, price, email } = req.body;
 
-    // Respond with success message
-    res.status(201).json({ message: 'Vendor added successfully', vendor: newVendor });
+    // Check if the service name already exists
+    const existingVendor = await Vendor.findOne({ service_name });
+
+    if (existingVendor) {
+      return res.status(400).json({ message: 'Service name already exists. Please choose another.' });
+    }
+
+    // Create a new vendor if service name does not exist
+    const newVendor = new Vendor({
+      service_name,
+      service_type,
+      description,
+      what_we_provide,
+      price,
+      email,
+    });
+
+    await newVendor.save();
+    return res.status(201).json(newVendor);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add vendor', details: error.message });
+    console.error("Error adding vendor:", error);
+    return res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 };
+
+// Delete a vendor
+const deleteVendor = async (req, res) => {
+  try {
+    const deletedVendor = await Vendor.findByIdAndDelete(req.params.id);
+
+    if (!deletedVendor) {
+      return res.status(404).json({ message: 'Vendor not found' });
+    }
+
+    res.status(200).json({ message: 'Vendor deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete vendor', details: error.message });
+  }
+};
+
+// Export the controller functions
 
 const updateVendor = async (req, res) => {
   try {
@@ -57,5 +83,6 @@ const updateVendor = async (req, res) => {
 module.exports = {
   getVendors,
   addVendor,
+  deleteVendor,
   updateVendor
 };
