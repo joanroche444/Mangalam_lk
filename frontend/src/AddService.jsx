@@ -33,7 +33,7 @@ const AddService = () => {
 
     const dataToSend = {
       ...formData,
-      email: "kasunr@gmail.com", // Static email
+      email: "kasun3@gmail.com", // Static email
     };
 
     try {
