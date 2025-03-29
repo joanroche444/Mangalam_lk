@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Vendor Schema
 const VendorSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique:false },
   service_name: { type: String, required: true },
   service_type: { type: String, required: true },
   description: { type: String, required: true },

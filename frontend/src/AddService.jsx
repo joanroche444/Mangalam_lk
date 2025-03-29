@@ -10,20 +10,30 @@ const AddService = () => {
     price: "",
   });
   const [errorMessage, setErrorMessage] = useState(""); // State to manage error message
+  const [priceError, setPriceError] = useState(""); // State to manage price error message
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errorMessage) {
       setErrorMessage(""); // Clear the error message when the user starts typing again
     }
+    if (priceError) {
+      setPriceError(""); // Clear price error if user changes the price field
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Price validation: Check if the price is a valid number and is not negative
+    if (isNaN(formData.price) || formData.price < 0) {
+      setPriceError("Price must be a valid number and cannot be negative.");
+      return; // Stop the form submission if there's a price validation error
+    }
+
     const dataToSend = {
       ...formData,
-      email: "ran4434@gmail.com", // Static email
+      email: "kasunr@gmail.com", // Static email
     };
 
     try {
@@ -139,6 +149,9 @@ const AddService = () => {
                 placeholder="Enter the price"
                 required
               />
+              {priceError && (
+                <p className="text-red-600 text-sm mt-2">{priceError}</p> // Display price error in red
+              )}
             </div>
 
             <button

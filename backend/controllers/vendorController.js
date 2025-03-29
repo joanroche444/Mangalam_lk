@@ -78,11 +78,28 @@ const updateVendor = async (req, res) => {
   }
 };
 
+const getVendorByEmail = async (req, res) => {
+  try {
+    const { email } = req.params; // Get the email from the URL parameters
+    const vendor = await Vendor.findOne({ email }); // Find the vendor by email
+
+    if (!vendor) {
+      return res.status(404).json({ message: 'Vendor not found' }); // Return 404 if vendor is not found
+    }
+
+    res.status(200).json(vendor); // Return the found vendor as JSON response
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch vendor', details: error.message }); // Handle errors
+  }
+};
+
+
 
 // Export the controller functions
 module.exports = {
   getVendors,
   addVendor,
+  getVendorByEmail,
   deleteVendor,
   updateVendor
 };
