@@ -16,7 +16,7 @@ const VendorDashboard = () => {
 
   const serviceImages = {
     "Catering": "https://i.pinimg.com/236x/56/1d/f0/561df0ddacb3d0ddd77ef4dfa6226c9f.jpg",
-    "Venue": "https://i.pinimg.com/736x/8e/3d/98/8e3d984233bb8dcec1607ff8ca5f65a4.jpg",
+    "Venue": "https://i.pinimg.com/736x/3f/1c/cd/3f1ccd79c55ba5a9355fcd41e64bd533.jpg",
     "Photography/Videography": "https://i.pinimg.com/736x/cd/eb/8b/cdeb8befdcb36284c5475074c0dbee5a.jpg",
     "Cake": "https://i.pinimg.com/736x/70/b0/e4/70b0e482f566d1753c27c745454f5dd2.jpg",
     "cake": "https://i.pinimg.com/736x/8e/3d/98/8e3d984233bb8dcec1607ff8ca5f65a4.jpg",
