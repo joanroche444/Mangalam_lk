@@ -1,65 +1,178 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/mangalamlogo.png';
-
-import { Star , User} from 'lucide-react';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logoMangalam.png';
+import { useLogout } from '../hooks/useLogout';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Navbar = () => {
+  const { logout } = useLogout();
+  const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrolled]);
+
   return (
-    <nav className="w-full py-4 px-6 flex items-center justify-between bg-[#f9efe7] shadow-md">
-    {/* Logo */}
-    <div className="flex items-center">
-      <Link to="/" className="flex items-center">
-        <img src={logo} alt="Mangalamalika" className="h-16" />
-      </Link>
-    </div>
+    <nav 
+      className={`fixed w-full py-4 px-6 flex items-center justify-between bg-[#f9efe7] shadow-md transition-opacity duration-300 z-50 ${
+        scrolled ? 'opacity-80' : 'opacity-100'
+      }`}
+    >
+      {/* Logo */}
+      <div className="flex items-center">
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="Mangalamalika" className="h-16" />
+        </Link>
+      </div>
 
-    {/* Navigation Links */}
-    <div className="hidden md:flex items-center space-x-8">
-      <Link
-        to="/budget"
-        className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
-      >
-        Budget
-      </Link>
-      <Link
-        to="/venue"
-        className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
-      >
-        Venue
-      </Link>
-      <Link
-        to="/guests"
-        className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
-      >
-        Guests
-      </Link>
-      <Link
-        to="/vendors"
-        className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
-      >
-        Vendors
-      </Link>
-    </div>
+      {/* Navigation Links */}
+      <div className="hidden md:flex items-center space-x-8">
+        <Link
+          to="/budget"
+          className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
+        >
+          Budget
+        </Link>
+        <Link
+          to="/venue"
+          className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
+        >
+          Venue
+        </Link>
+        <Link
+          to="/guests"
+          className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
+        >
+          Guests
+        </Link>
+        <Link
+          to="/vendors"
+          className="text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300"
+        >
+          Vendors
+        </Link>
+      </div>
 
-    {/* Auth Links */}
-    <div className="flex items-center space-x-6">
-      <Link
-        to="/login"
-        className="text-[#b06a5d] font-semibold hover:underline transition duration-300"
-      >
-        Login
-      </Link>
-      <Link
-        to="/signup"
-        className="bg-[#b06a5d] text-white py-2 px-4 rounded-lg font-semibold hover:bg-[#8d5347] transition duration-300"
-      >
-        Sign Up
-      </Link>
-    </div>
-  </nav>
-  )
-}
+      {/* Auth Section */}
+      <div className="flex items-center space-x-6">
+        {user ? (
+          // Show user profile dropdown when logged in
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center space-x-2 focus:outline-none"
+            >
+              {/* Profile Picture */}
+              <div className="w-8 h-8 rounded-full bg-[#b06a5d] flex items-center justify-center text-white">
+                {user.email.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-[#b06a5d] font-medium hidden md:inline">
+                {user.email.split('@')[0]}
+              </span>
+            </button>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <Link
+                  to="/"
+                  className="block px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/my-projects"
+                  className="block px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  My Projects
+                </Link>
+                <Link
+                  to="/find-vendors"
+                  className="block px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Find Vendors
+                </Link>
+                <Link
+                  to="/ideas-advice"
+                  className="block px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Ideas & Advice
+                </Link>
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Your Profile
+                </Link>
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    handleLogout();
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-[#b06a5d] hover:bg-[#f9efe7]"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          // Show login/signup when not logged in
+          <>
+            <Link
+              to="/login"
+              className="text-[#b06a5d] font-semibold hover:underline transition duration-300"
+            >
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-[#b06a5d] text-white py-2 px-4 rounded-lg font-semibold hover:bg-[#8d5347] transition duration-300"
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
 
 export default Navbar;

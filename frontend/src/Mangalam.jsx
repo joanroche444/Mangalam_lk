@@ -140,14 +140,14 @@ const Mangalam = () => {
     <section className="py-8 px-6 bg-[#b06a5d] text-center">
         <div className="container mx-auto max-w-4xl">
     <h2 className="text-white text-3xl font-bold  mb-6">
-      Why Plan Your Wedding with Us?
+      Are you a professional planner, vendor or venue?
     </h2>
     <p className="text-white text-lg mb-8">
-      We provide all the tools you need to create the perfect wedding, stress-free!
+      Join our platform to connect with couples and showcase your services.
     </p>
    <Link to={'/signup'}>
     <button className="mt-8 bg-white text-[#b06a5d] px-6 py-3 rounded-md text-lg hover:bg-gray-100 transition">
-      Start Planning Now
+      Bussiness Portal
     </button>
     </Link>
   </div>  

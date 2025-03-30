@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
 const VendorsRouting = require('./Routes/VendorsRouting'); 
 const userRoutes = require('./Routes/userRoutes')// Adjust the path to your route
 
@@ -15,6 +17,12 @@ mongoose
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['POST', 'GET', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+})); // Use CORS options
 
 // Use the vendor route
 app.use('/api/vendor', VendorsRouting);

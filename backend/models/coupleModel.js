@@ -14,6 +14,14 @@ const coupleSchema = new Schema({
     weddingDate: {
         type: Date
     },
+    budget: {
+        type: Number,
+        required: true
+    },
+    guestCount: {
+        type: Number,
+        required: true
+    },
     status: {
         type: String,
         enum: ['planning', 'completed', 'cancelled'],

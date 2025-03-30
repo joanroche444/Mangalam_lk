@@ -8,33 +8,23 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     firstName:{
         type:String,
-        required:false
+        required:true
     },
-    middleName:{
-        type:String,
-        required:false
-    },
+   
     lastName:{
         type:String,
-        required:false
+        required:true
     },
-    gender:{
-        type:String,
-        required:false
-    },
-    dob:{
-        type:Date,
-        required:false
-    },
-    phoneNumber:{
-        type:String,
-        required:false
-    },
+
     email:{
         type:String,
         required:true,
         unique:true,
         lowercase:true,
+    },
+    phone:{
+        type:String,
+
     },
     password:{
         type:String,
@@ -43,7 +33,8 @@ const userSchema = new Schema({
     },
     role:{
         type:String,
-        enum: [, 'couple', 'vendor', 'admin'],
+        enum: ['couple', 'vendor', 'admin'],
+        default:'couple'
     },
     profilePicture:{
         type:String,
@@ -61,11 +52,12 @@ const userSchema = new Schema({
 
 // Hash the password before saving the user
 
-userSchema.statics.signup = async function(email, password)  {
+userSchema.statics.signup = async function(userData)  {
+    let { firstName, lastName, email, password, phone, role } = userData;
+
     // Validation
-    if (!email || !password) {
-        throw Error('All fields must be filled');
-    }
+ 
+
     if (!validator.isEmail(email)) {
         throw Error('Email is not valid');
     }
@@ -85,8 +77,17 @@ userSchema.statics.signup = async function(email, password)  {
     const hash = await bcrypt.hash(password, salt);
 
     // Create the user
-    const user = await this.create({ email, password: hash });
-    return user;
+    const user = await this.create({ 
+        firstName,
+        lastName,
+        email, 
+        password: hash ,
+        phone: phone || '',
+        role: role || 'couple'
+    });
+
+    
+   return user;
 }
 
 //static login method
@@ -107,6 +108,10 @@ userSchema.statics.login = async function(email, password){
 
     return user;
 }
+
+userSchema.methods.verifyPassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 
 
