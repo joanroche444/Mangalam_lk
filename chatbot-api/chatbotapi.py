@@ -14,12 +14,72 @@ model = AutoModelForQuestionAnswering.from_pretrained(model_name)
 # FAQ Responses (you can expand this as needed)
 faq_responses = {
     "rsvp": "Guests can update their RSVP by going to the 'My Attendance' page.",
-    "wedding services": "Yes, we offer services like photography, music, decoration, and catering. You can also book a stage for dance and custom wedding cakes.",
-    "photography services": "Yes, we offer photography services for your wedding. Would you like to book one?",
-    "music services": "Yes, we provide music services to suit your wedding theme.",
-    "catering services": "Yes, we offer catering services with a variety of menus.",
-   "cake": 'We offer cakes! .1  Go to the services section: <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Click here to select the service you want</a> filter with cake option if you find your vendor add that to project'
+    "wedding services": """
+        Yes, we offer a variety of wedding services to make your big day special, including:
+        <ul>
+            <li><a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Photography & Videography</a></li>
+            <li><a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Cakes</a></li>
+            <li><a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Decoration</a></li>
+            <li><a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">Venue</a></li>
+        </ul>
+        To explore all available services, please <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">click here</a>.
+    """,
+    "photography services": """
+        We offer a range of photography services for your wedding! 📸
+        To explore available photography vendors, you can either:
+        <ul>
+            <li>Go to the 'Vendors' section in the navigation bar and select the photography category, or</li>
+            <li>Click <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">here</a> to directly visit the services section and filter by photography vendors.</li>
+        </ul>
+        Once you find a photographer you like, you can add them to your project. Let us know if you need any assistance!
+    """,
+    "catering services": """
+        We offer a wide variety of catering services to suit your wedding's taste! 🍽️
+        To explore available catering vendors, you can either:
+        <ul>
+            <li>Go to the 'Vendors' section in the navigation bar and select the catering category, or</li>
+            <li>Click <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">here</a> to directly visit the services section and filter by catering vendors.</li>
+        </ul>
+        Once you find a vendor that fits your needs, you can add them to your project. Let us know if you need help!
+    """,
+    "decoration services": """
+        I see you are intrested in our decoration Services!💐
+        To explore available decoration vendors, you can either:
+        <ul>
+            <li>Go to the 'Vendors' section in the navigation bar and select the decoration category, or</li>
+            <li>Click <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">here</a> to directly visit the services section and filter by decoration vendors.</li>
+        </ul>
+        Once you find a decorator you love, you can add them to your project. Let us know if you need any assistance!
+    """,
+    "venue services": """
+        We offer beautiful venues for your wedding day! 🏰
+        To explore available venue options, you can either:
+        <ul>
+            <li>Go to the 'Vendors' section in the navigation bar and select the venue category, or</li>
+            <li>Click <a href="http://localhost:5173/AllService" target="_blank" style="text-decoration: underline;">here</a> to directly visit the services section and filter by venue options.</li>
+        </ul>
+        Once you find a venue that suits your style, you can add it to your project. Let us know if you need any help!
+    """,
+    "how many vendors": "We currently have 7 vendors available on our platform, offering a variety of services to make your wedding day perfect.",
+    "manage wedding budget": """
+        To manage your wedding budget, you can use the budget dashboard on Mangalam. Here's how you can do it:
+        <ul>
+            <li>Visit the <a href="http://localhost:5174/budgetdash" target="_blank" style="text-decoration: underline;">Budget Dashboard</a></li>
+            <li>Click on 'Add Income' to start tracking your expenses.</li>
+            <li>Add your necessary wedding expenses to keep track of your wedding budget.</li>
+        </ul>
+        This will help you stay organized and ensure you are on track with your wedding budget.
+    """,
+    "website color palette": """
+        The color palette for this website includes shades such as:
+        <ul>
+            <li><strong>Reddish-Brown (#A85D50)</strong></li>
+            <li><strong>Black</strong></li>
+        </ul>
+        These colors are used to create a warm, inviting, and professional aesthetic for the site.
+    """
 }
+
 
 def answer_question(question, context):
     inputs = tokenizer(question, context, return_tensors="pt")
@@ -59,8 +119,8 @@ def ask():
     
     # Default context (You can modify this based on your app)
     context = """
-    Mangalam is an online wedding planning platform where everything is in one place. 
-    wedding service section is the section where all the vendors for mangalam is available ,services is there so a couple can pick there prefered vendor 
+    Mangalam is a sri lankan online wedding planning platform, couples can find vendors and book wedding 
+    
     """
     
     # If it's the first request, greet the user
@@ -69,6 +129,8 @@ def ask():
     
     # Otherwise, answer the user's question using the model
     answer = answer_question(question, context)
+    if not answer.strip() or "[CLS]" in answer:
+        return jsonify({"answer": "I'm sorry, I'm still training. Could you rephrase your question?"})
     return jsonify({"answer": answer})
 
 # Run the Flask server

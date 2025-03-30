@@ -33,7 +33,7 @@ const AddService = () => {
 
     const dataToSend = {
       ...formData,
-      email: "kasun3@gmail.com", // Static email
+      email: "joan123@gmail.com", // Static email
     };
 
     try {
@@ -100,15 +100,21 @@ const AddService = () => {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2">Service Type</label>
-              <input
-                type="text"
+              <select
                 name="service_type"
                 value={formData.service_type}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EBD4C8]"
-                placeholder="Enter service type"
                 required
-              />
+              >
+                <option value="">Select a service type</option>
+                <option value="Catering">Catering</option>
+                <option value="Cake/Bake">Cake/Bake</option>
+                <option value="Decoration">Decoration</option>
+                <option value="Photography/Videography">Photography/Videography</option>
+                <option value="Venue">Venue</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium mb-2">Service Description</label>

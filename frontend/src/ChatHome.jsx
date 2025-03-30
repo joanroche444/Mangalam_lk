@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Navbar from "../Component/Navbar";
+import Footer from "../Component/Footer";
 
 const ChatHome = () => {
   const [question, setQuestion] = useState("");
@@ -38,8 +40,10 @@ const ChatHome = () => {
   };
 
   return (
-    <div className="bg-[#FFF0F2] min-h-screen flex flex-col items-center">
-       <h1 className="text-4xl md:text-6xl font-bold text-black italic mb-4">welcome to customer support!!</h1>
+    <div>
+      < Navbar />
+    <div className="bg-[#EBD4C8] min-h-screen flex flex-col items-center">
+       <h1 className="text-4xl md:text-6xl font-bold font-serif italic text-black italic mb-4">welcome to customer support!!</h1>
           <motion.h1
             key={textIndex}
             className="text-3xl md:text-5xl font-bold text-black italic"
@@ -153,6 +157,8 @@ const ChatHome = () => {
           </div>
         </div>
       )}
+    </div>
+    <Footer />
     </div>
   );
 };
