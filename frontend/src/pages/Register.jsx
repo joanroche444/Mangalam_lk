@@ -51,11 +51,11 @@ const Register = () => {
           const { success, error } = await signup(submitData);
          
         if(success){
-            toast.success("Registration successful!", {
+            toast.success("Registration successful! Redirecting...", {
                 position: "top-right",
                 autoClose: 5000,
               });
-              navigate("/");
+              setTimeout(() => navigate("/"), 2000); // Redirect after 2 seconds
         }else{
             toast.error(error, {
                 position: "top-right",
