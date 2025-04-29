@@ -1,10 +1,6 @@
 # 💍 Mangalam – Wedding Planning Platform
 
-Mangalam is an intelligent, all-in-one wedding planning platform designed to ease the burden of wedding preparation. With everything in one place — from vendor management to budget tracking, task planning, and even an AI-powered chatbot for instant assistance — Mangalam empowers couples to plan their perfect day with clarity and confidence. Built with a modern tech stack and thoughtful design, the platform transforms wedding planning from a stressful task into a joyful journey.
-
-> 🎓 Developed as a Year 3 Semester 2 project at SLIIT.
-
----
+## Mangalam is an intelligent, all-in-one wedding planning platform designed to ease the burden and stress of wedding preparation. With everything in one place — from vendor management and budget tracking to task planning and an AI-powered chatbot for instant assistance — Mangalam empowers couples to plan their perfect day with clarity, confidence, and peace of mind. By streamlining complex logistics into a user-friendly experience, Mangalam transforms wedding planning from a stressful chore into a
 
 ## ✨ Features
 
@@ -18,10 +14,10 @@ Mangalam is an intelligent, all-in-one wedding planning platform designed to eas
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React.js + Bootstrap/Tailwind  
-- **Backend:** Node.js + Express  
-- **Database:** MongoDB  
-- **NLP Model:** Hugging face reference API  
+- **Frontend:** React.js + Bootstrap/Tailwind
+- **Backend:** Node.js + Express
+- **Database:** MongoDB
+- **NLP Model:** Hugging face reference API
 - **Other Tools:** JWT Authentication, REST APIs, GitHub for version control
 
 ---
@@ -40,4 +36,4 @@ Mangalam is an intelligent, all-in-one wedding planning platform designed to eas
    ```bash
    git clone https://github.com/joanroche444/mangalam.git
    cd mangalam
-
+   ```
