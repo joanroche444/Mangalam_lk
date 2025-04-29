@@ -21,7 +21,7 @@ Mangalam is an intelligent, all-in-one wedding planning platform designed to eas
 - **Frontend:** React.js + Bootstrap/Tailwind  
 - **Backend:** Node.js + Express  
 - **Database:** MongoDB  
-- **AI Chatbot:** Python + Hugging Face Transformers  
+- **NLP Model:** Hugging face reference API  
 - **Other Tools:** JWT Authentication, REST APIs, GitHub for version control
 
 ---
@@ -32,14 +32,12 @@ Mangalam is an intelligent, all-in-one wedding planning platform designed to eas
 
 - Node.js & npm
 - MongoDB
-- Python 3.8+
-- Hugging Face Transformers (`pip install transformers`)
 - Git
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/<your-username>/mangalam.git
+   git clone https://github.com/joanroche444/mangalam.git
    cd mangalam
 
