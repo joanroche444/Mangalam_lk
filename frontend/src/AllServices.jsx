@@ -36,17 +36,17 @@ const AllServices = () => {
   }, []);
 
   const defaultImage =
-    "https://i.pinimg.com/736x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg"; // Default image for all cards
+    "https://i.pinimg.com/736x/ae/0a/fd/ae0afd05e9b35d43ac069b2e2e61c742.jpg"; // Default image for all cards
   const cakeImage =
     "https://i.pinimg.com/736x/70/b0/e4/70b0e482f566d1753c27c745454f5dd2.jpg"; // Image for "Cake" service type
   const cateringImage =
-    "https://i.pinimg.com/236x/56/1d/f0/561df0ddacb3d0ddd77ef4dfa6226c9f.jpg"; // Image for "Catering" service type
+    "https://i.pinimg.com/736x/06/c6/2f/06c62f4efec79f808342df5dea6da634.jpg"; // Image for "Catering" service type
   const venueImage =
     "https://i.pinimg.com/736x/bd/b2/b3/bdb2b3175179ba0534979f0608f8997c.jpg"; // Image for "Venue" service type
   const photographyImage =
     "https://i.pinimg.com/736x/cd/eb/8b/cdeb8befdcb36284c5475074c0dbee5a.jpg"; // Image for "Photography/Videography" service type
   const decorationImage =
-    "https://i.pinimg.com/236x/70/1f/a1/701fa14c523d80dee83bbfdeca92ba2c.jpg"; // Image for "Decoration" service type
+    "https://i.pinimg.com/736x/10/9b/90/109b90884bbaa7b275a6fbf9693c87f1.jpg"; // Image for "Decoration" service type
 
   return (
     <div>
@@ -91,7 +91,7 @@ const AllServices = () => {
             case "Photography/Videography":
               backgroundImage = photographyImage;
               break;
-            case "Cake":
+            case "Cake/Bake":
               backgroundImage = cakeImage;
               break;
             case "Decoration":

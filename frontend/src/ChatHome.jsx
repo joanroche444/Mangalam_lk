@@ -43,7 +43,7 @@ const ChatHome = () => {
     <div>
       < Navbar />
     <div className="bg-[#EBD4C8] min-h-screen flex flex-col items-center">
-       <h1 className="text-4xl md:text-6xl font-bold font-serif italic text-black italic mb-4">welcome to customer support!!</h1>
+       <h1 className="text-4xl md:text-6xl font-bold font-serif italic text-white italic mb-4">welcome to customer support!!</h1>
           <motion.h1
             key={textIndex}
             className="text-3xl md:text-5xl font-bold text-black italic"

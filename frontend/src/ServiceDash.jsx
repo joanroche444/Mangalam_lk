@@ -15,13 +15,13 @@ const VendorDashboard = () => {
   ];
 
   const serviceImages = {
-    "Catering": "https://i.pinimg.com/236x/56/1d/f0/561df0ddacb3d0ddd77ef4dfa6226c9f.jpg",
+    "Catering": "https://i.pinimg.com/736x/06/c6/2f/06c62f4efec79f808342df5dea6da634.jpg",
     "Venue": "https://i.pinimg.com/736x/3f/1c/cd/3f1ccd79c55ba5a9355fcd41e64bd533.jpg",
     "Photography/Videography": "https://i.pinimg.com/736x/cd/eb/8b/cdeb8befdcb36284c5475074c0dbee5a.jpg",
-    "Cake": "https://i.pinimg.com/736x/70/b0/e4/70b0e482f566d1753c27c745454f5dd2.jpg",
+    "Cake/Bake": "https://i.pinimg.com/736x/70/b0/e4/70b0e482f566d1753c27c745454f5dd2.jpg",
     "cake": "https://i.pinimg.com/736x/8e/3d/98/8e3d984233bb8dcec1607ff8ca5f65a4.jpg",
-    "Decoration": "https://i.pinimg.com/736x/da/92/79/da92799e45c17445d4cd7ae75b66d195.jpg",
-    "default": "https://i.pinimg.com/736x/f3/4d/2b/f34d2bc33c132f07d8e18265d24a78ec.jpg",
+    "Decoration": "https://i.pinimg.com/736x/10/9b/90/109b90884bbaa7b275a6fbf9693c87f1.jpg",
+    "Other": "https://i.pinimg.com/736x/ae/0a/fd/ae0afd05e9b35d43ac069b2e2e61c742.jpg",
   };
 
   useEffect(() => {

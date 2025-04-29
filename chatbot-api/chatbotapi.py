@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from transformers import AutoModelForQuestionAnswering, AutoTokenizer
@@ -119,7 +120,7 @@ def ask():
     
     # Default context (You can modify this based on your app)
     context = """
-    Mangalam is a sri lankan online wedding planning platform, couples can find vendors and book wedding 
+    Mangalam is a sri lankan online wedding planning platform, couples can find vendors and book wedding ,The platform offers a variety of wedding services such as photography, cakes, decoration, and venues. For more details, users can visit the All Services page at,The platform provides various photography services. To view available photography vendors, users
     
     """
     
