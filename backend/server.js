@@ -1,29 +1,40 @@
 const express = require('express');
-require('dotenv').config();
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
+const cors = require('cors');
+
+const projectRoutes = require('./routes/projectRoutes');
+const scheduleRoutes = require('./routes/scheduleRoutes');
+const seatingRoutes = require('./routes/seatingRoutes');
+
+dotenv.config();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log('DB connected'))
-  .catch((err) => console.log('DB connection failed', err));
-
-// Middleware to parse incoming JSON data
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Use the vendor route
-app.use('/api/vendor', VendorsRouting);
+// Routes
+app.use('/api/projects', projectRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/seating', seatingRoutes);
 
-// Test route to check if server is working
+// Test
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// Mongo connection + start
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('DB connection failed:', err.message);
+  });

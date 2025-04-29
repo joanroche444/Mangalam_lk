@@ -1,35 +1,79 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const guests = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank"]; // Dummy guest names
-
 const SeatingChart = () => {
-  const [seats, setSeats] = useState(Array(40).fill(null)); // 40 empty seats
-  const pdfRef = useRef(null); // For PDF generation
+  const { projectId } = useParams(); // Get projectId from URL
+  const [seats, setSeats] = useState(Array(40).fill(null));
+  const [guests, setGuests] = useState([]);
+  const pdfRef = useRef(null);
 
-  // Drag-and-Drop Handlers
+  // 🧠 Backend APIs
+  const fetchGuests = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/guests/${projectId}`);
+      const data = await res.json();
+      setGuests(data.map((g) => g.name)); // Assuming { name: 'Alice' } format
+    } catch (err) {
+      console.error("Error fetching guests:", err);
+    }
+  };
+
+  const fetchSeating = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/seating/${projectId}`);
+      const data = await res.json();
+      const updated = Array(40).fill(null);
+      data.forEach((s) => {
+        updated[s.seatIndex] = s.guestName;
+      });
+      setSeats(updated);
+    } catch (err) {
+      console.error("Error fetching seating:", err);
+    }
+  };
+
+  const assignSeat = async (index, guest) => {
+    try {
+      await fetch("http://localhost:5000/api/seating", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, seatIndex: index, guestName: guest }),
+      });
+    } catch (err) {
+      console.error("Error assigning seat:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (projectId) {
+      fetchGuests();
+      fetchSeating();
+    }
+  }, [projectId]);
+
+  // 🔄 Drag and Drop Logic
   const handleDragStart = (event, guest) => {
     event.dataTransfer.setData("text/plain", guest);
   };
 
-  const handleDrop = (event, index) => {
+  const handleDrop = async (event, index) => {
     event.preventDefault();
     const guest = event.dataTransfer.getData("text/plain");
 
-    // Validate if the guest is already seated
     if (seats.includes(guest)) {
-      alert(`${guest} is already seated! Please choose another guest.`);
-      return; // Stop the operation if the guest is already seated
+      alert(`${guest} is already seated!`);
+      return;
     }
 
-    setSeats((prevSeats) => {
-      const newSeats = [...prevSeats];
-      newSeats[index] = guest; // Assign guest to seat
-      return newSeats;
-    });
+    const updated = [...seats];
+    updated[index] = guest;
+    setSeats(updated);
+
+    await assignSeat(index, guest);
   };
 
   const handleDragOver = (event) => event.preventDefault();
@@ -37,37 +81,28 @@ const SeatingChart = () => {
   const generatePDF = () => {
     if (!pdfRef.current) {
       alert("Seating chart is empty! Please arrange the seats first.");
-      return; // Prevent PDF export if no seats are arranged
+      return;
     }
-  
-    // Use a timeout to ensure everything has been rendered
+
     setTimeout(() => {
       html2canvas(pdfRef.current, {
-        useCORS: true,  // Enable cross-origin resource sharing if needed
-        scale: 2, // Increase scale for better resolution
-        logging: true, // Enable logging to debug
-        letterRendering: true, // Improve text rendering
-        backgroundColor: "#ffffff", // Set a solid background color (no transparency)
-      }).then((canvas) => {
-        // Check if the canvas has content
-        if (!canvas) {
-          console.error("Error: Canvas is empty");
-          alert("There was an error generating the PDF. Please try again.");
-          return;
-        }
-  
-        const imgData = canvas.toDataURL("image/png");
-  
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 10, 10, 190, 0); // Adjust the size as needed
-        pdf.save("seating-chart.pdf"); // Save PDF to the user
-      }).catch((err) => {
-        console.error("Error generating PDF:", err);
-        alert("There was an error generating the PDF. Please try again.");
-      });
-    }, 1000); // Delay to ensure rendering completes
+        useCORS: true,
+        scale: 2,
+        backgroundColor: "#ffffff",
+      })
+        .then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF();
+          pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
+          pdf.save("seating-chart.pdf");
+        })
+        .catch((err) => {
+          console.error("Error generating PDF:", err);
+          alert("There was an error generating the PDF.");
+        });
+    }, 1000);
   };
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100">
       <Navbar />
@@ -78,25 +113,31 @@ const SeatingChart = () => {
 
         {/* Guest List */}
         <div className="bg-white p-4 rounded-lg shadow-md w-64 mx-auto mb-6">
-          <h3 className="text-lg font-semibold mb-2 text-[#8d5347]">Guests</h3>
+          <h3 className="text-lg font-semibold mb-2 text-[#8d5347]">Guest List</h3>
           <ul>
-            {guests.map((guest, index) => (
-              <li
-                key={index}
-                draggable
-                onDragStart={(e) => handleDragStart(e, guest)}
-                className="p-2 bg-gray-200 rounded-md text-center cursor-pointer mb-2"
-              >
-                {guest}
-              </li>
-            ))}
+            {guests.length > 0 ? (
+              guests.map((guest, index) => (
+                <li
+                  key={index}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, guest)}
+                  className="p-2 bg-gray-200 rounded-md text-center cursor-pointer mb-2"
+                >
+                  {guest}
+                </li>
+              ))
+            ) : (
+              <li className="text-gray-500">No guests available</li>
+            )}
           </ul>
         </div>
 
         {/* Seating Chart */}
-        <div ref={pdfRef} className="bg-white p-6 rounded-2xl shadow-md text-center">
+        <div
+          ref={pdfRef}
+          className="bg-white p-6 rounded-2xl shadow-md text-center"
+        >
           <h2 className="text-xl font-semibold mb-4 text-[#8d5347]">Ceremony Layout</h2>
-
           <div className="grid grid-cols-8 gap-2 justify-center">
             {seats.map((seat, index) => (
               <div

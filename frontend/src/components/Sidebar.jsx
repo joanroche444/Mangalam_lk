@@ -11,7 +11,7 @@ export default function Sidebar() {
               <a href="/create-wedding-project" className="block p-2 rounded text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300">Create New Project</a>
             </li>
             <li>
-              <a href="/create-schedule" className="block p-2 rounded text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300">Wedding Schedule</a>
+              <a href="/create-schedule/:projectId" className="block p-2 rounded text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300">Wedding Schedule</a>
             </li>
             <li>
               <a href="#" className="block p-2 rounded text-[#b06a5d] hover:text-[#8d5347] font-semibold transition duration-300">Guest List</a>

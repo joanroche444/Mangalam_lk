@@ -1,37 +1,29 @@
-import Button from "./Button";
+import React from "react";
 
-export default function Card({ project, onEdit, onDelete }) {
+const Card = ({ project, onEdit, onDelete }) => {
   return (
-    <div className="p-4 shadow-lg bg-white rounded-lg">
-      {project?.image ? (
-        <img
-          src={project.image}
-          alt={project.name}
-          className="w-full h-40 object-cover rounded-lg"
-        />
-      ) : null}
-      {project?.name ? (
-        <h2 className="text-lg font-semibold mt-2">{project.name}</h2>
-      ) : null}
-      <div className="mt-3">
-        {/* Passing children to allow custom elements like the buttons */}
+    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col justify-between min-h-[180px]">
+      <div>
+        <h3 className="text-lg font-semibold text-[#8d5347] mb-2">
+          {project.name}
+        </h3>
       </div>
-      {project ? (
-        <div className="mt-3 flex gap-2">
-          <Button
-            onClick={() => onEdit(project.id)} // Trigger edit action
-            variant="outline"
-          >
-            Edit
-          </Button>
-          <Button
-            onClick={() => onDelete(project.id)} // Trigger delete action
-            variant="destructive"
-          >
-            Delete
-          </Button>
-        </div>
-      ) : null}
+      <div className="flex justify-between gap-2 mt-4">
+        <button
+          onClick={() => onEdit(project._id)}
+          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => onDelete(project._id)}
+          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default Card;

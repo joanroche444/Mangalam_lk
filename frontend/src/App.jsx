@@ -19,7 +19,7 @@ function App() {
         <Route path="/themes" element={<WeddingThemes />} />
         <Route path="/themes/:id" element={<ThemeDetails />} />
         <Route path="/create-wedding-project" element={<CreateWeddingProject />} />
-        <Route path="/create-schedule" element={<WeddingSchedule/>} />
+        <Route path="/create-schedule/:projectId" element={<WeddingSchedule />} />
         <Route path="/seating" element={<SeatingChart/>} />
       </Routes>
     </Router>
