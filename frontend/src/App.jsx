@@ -18,12 +18,11 @@ function App() {
       <Routes>
 
         {/* The root path renders the DashboardLayout with the Home component inside it */}
-        <Route path="/dash" element={<DashboardLayout />}>
+        <Route path="/" element={<Mangalam />} />
+    
           <Route path="/dashboard" element={<HomeNew/>} />
           <Route path="/IncomeForm" element={<IncomeForm/>} />
-        </Route>
-
-        <Route path="/" element={<Mangalam />} />
+  
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<ProfilePage />} />
