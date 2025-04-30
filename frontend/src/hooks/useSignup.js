@@ -23,11 +23,16 @@ export const useSignup = () => {
                 throw new Error(json.error || 'Registration failed');
             }
 
+            const userData = {
+                ...json.user,
+                token: json.token
+            };
+
             // Save user to local storage
-            localStorage.setItem('user', JSON.stringify(json));
+            localStorage.setItem('user', JSON.stringify(userData));
 
             // Update auth context
-            dispatch({ type: 'LOGIN', payload: json });
+            dispatch({ type: 'LOGIN', payload: userData });
 
             return { success: true };
         } catch (err) {

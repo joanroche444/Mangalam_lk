@@ -26,6 +26,10 @@ const userSchema = new Schema({
         type:String,
 
     },
+    weddingDate: {
+        type: Date,
+        required: true
+    },
     password:{
         type:String,
         required:true,
@@ -53,7 +57,7 @@ const userSchema = new Schema({
 // Hash the password before saving the user
 
 userSchema.statics.signup = async function(userData)  {
-    let { firstName, lastName, email, password, phone, role } = userData;
+    let { firstName, lastName, email, password, weddingDate, phone, role } = userData;
 
     // Validation
  
@@ -83,6 +87,7 @@ userSchema.statics.signup = async function(userData)  {
         email, 
         password: hash ,
         phone: phone || '',
+        weddingDate: weddingDate || Date.now(),
         role: role || 'couple'
     });
 

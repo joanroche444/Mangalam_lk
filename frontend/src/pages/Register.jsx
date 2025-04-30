@@ -24,7 +24,7 @@ const Register = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm password is required"),
       role: Yup.string()
-        .oneOf(["couple", "vendor", "admin"])
+        .oneOf(["couple", "vendor"])
         .required("Role is required"),
     });
   
@@ -198,9 +198,9 @@ const Register = () => {
               onBlur={formik.handleBlur}
               value={formik.values.role}
             >
-              <option value="couple">Couple</option>
-              <option value="vendor">Vendor</option>
-              <option value="admin">Admin</option>
+              <option value="couple" className="">Couple</option>
+              <option value="vendor" className="">Vendor</option>
+              
             </select>
             <label
               htmlFor="role"

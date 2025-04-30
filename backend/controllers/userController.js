@@ -6,6 +6,26 @@ const createToken = (_id) => {
 }
 
 
+//update user
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+
+        if (!id){
+            return res.status(400).json({ error: 'User ID is required' });
+        }
+
+        res.status(200).json({
+            message: 'Profile updated successfully',
+            user
+        });
+    }catch (error) {
+        console.error("Update User Error:", error.message);
+        res.status(500).json({ error: 'Server error while updating user' });
+    }
+}
+
 //login user
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -14,7 +34,14 @@ const loginUser = async (req, res) => {
 
         const token = createToken(user._id);
 
-        res.status(200).json({ email, token });
+        res.status(200).json({ 
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            _id: user._id, 
+            token 
+        });
     }catch (error) {
         res.status(400).json({ error: error.message });  
     }
@@ -128,4 +155,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { loginUser, signupUser, getUserByID, deleteUser };
+module.exports = {updateUser, loginUser, signupUser, getUserByID, deleteUser };
