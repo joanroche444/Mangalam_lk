@@ -27,7 +27,9 @@ Mangalam is an intelligent, all-in-one wedding planning platform designed to eas
 
 - Node.js & npm
 - MongoDB
+- vite
 - Git
+- Python 3.8+
 
 ### Installation
 
