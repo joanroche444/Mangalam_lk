@@ -1,7 +1,6 @@
 # 💍 Mangalam – Wedding Planning Platform
 
-## Mangalam is an intelligent, all-in-one wedding planning platform designed to ease the burden and stress of wedding preparation. With everything in one place — from vendor management and budget tracking to task planning and an AI-powered chatbot for instant assistance — Mangalam empowers couples to plan their perfect day with clarity, confidence, and peace of mind. By streamlining complex logistics into a user-friendly experience, Mangalam transforms wedding planning from a stressful chore into a
-
+Mangalam is an intelligent, all-in-one wedding planning platform designed to ease the burden and stress of wedding preparation. With everything in one place — from vendor management and budget tracking to task planning and an AI-powered chatbot for instant assistance — Mangalam empowers couples to plan their perfect day with clarity, confidence, and peace of mind. By streamlining complex logistics into a user-friendly experience, Mangalam transforms wedding planning from a stressful chore into a joyful occasion.
 ## ✨ Features
 
 - 👤 **User & Profile Management** – Create and manage user profiles with personalized preferences.
