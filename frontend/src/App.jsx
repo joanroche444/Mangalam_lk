@@ -7,6 +7,7 @@ import ThemeDetails from './pages/ThemeDetails';
 import CreateWeddingProject from './pages/CreateWeddingProject';
 import WeddingSchedule from './pages/WeddingSchedule';
 import SeatingChart from './pages/SeatingPage';
+import GuestList from './pages/GuestList';
 
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/create-wedding-project" element={<CreateWeddingProject />} />
         <Route path="/create-schedule/:projectId" element={<WeddingSchedule />} />
         <Route path="/seating" element={<SeatingChart/>} />
+        <Route path="/guest-list" element={<GuestList/>} />
       </Routes>
     </Router>
   );

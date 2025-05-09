@@ -6,6 +6,7 @@ const cors = require('cors');
 const projectRoutes = require('./routes/projectRoutes');
 const scheduleRoutes = require('./routes/scheduleRoutes');
 const seatingRoutes = require('./routes/seatingRoutes');
+const GuestRoutes = require('./Routes/GuestRoutes')
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/projects', projectRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/seating', seatingRoutes);
+app.use('/api/Guest', GuestRoutes)
 
 // Test
 app.get('/', (req, res) => {
