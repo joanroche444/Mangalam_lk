@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.post('/', createGuest);
-router.get('/:projectId', getGuests);
+router.get('/', getGuests);
 router.delete('/:id', deleteGuest);
 
 module.exports = router;
