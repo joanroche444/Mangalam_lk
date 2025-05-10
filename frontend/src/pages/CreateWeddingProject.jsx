@@ -35,12 +35,15 @@ export default function CreateWeddingProject() {
   };
 
   const createProject = async (data) => {
-    await fetch("http://localhost:5000/api/projects", {
+    const res = await fetch("http://localhost:5000/api/projects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+  
+    return res.json(); // ✅ return the created project object
   };
+  
 
   const updateProject = async (id, data) => {
     await fetch(`http://localhost:5000/api/projects/${id}`, {
@@ -70,13 +73,19 @@ export default function CreateWeddingProject() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (projectId) {
       await updateProject(projectId, projectDetails);
+      navigate("/dashboard");
     } else {
-      await createProject(projectDetails);
+      const newProject = await createProject(projectDetails);
+      const newProjectId = newProject._id;
+  
+      navigate(`/create-schedule/${newProjectId}`); 
+      
     }
-    navigate("/dashboard");
   };
+  
 
   return (
     <div className="flex flex-col min-h-screen">

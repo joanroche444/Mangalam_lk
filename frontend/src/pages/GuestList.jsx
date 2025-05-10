@@ -109,7 +109,7 @@ const GuestList = ({ projectId, onGuestAdded }) => {
                     <option value="">Select Category</option>
                     <option value="Family">Family</option>
                     <option value="VIP">VIP</option>
-                    <option value="Friends">Friends</option>
+                    <option value="Friends">Friend</option>
                     <option value="Other">Other</option>
                </select>
                {errors.category && (
@@ -145,33 +145,33 @@ const GuestList = ({ projectId, onGuestAdded }) => {
               </div>
 
               <div className="flex justify-center gap-4 mt-4 md:col-span-2">
-  <button
-    onClick={handleAddGuest}
-    className="bg-[#b06a5d] text-white px-4 py-2 rounded hover:bg-[#9a5c4e] transition"
-  >
-    Add Guest
-  </button>
-</div>
+          <button
+           onClick={handleAddGuest}
+           className="bg-[#b06a5d] text-white px-4 py-2 rounded hover:bg-[#9a5c4e] transition"
+          >
+             Add Guest
+         </button>
+        </div>
 
             </div>
 
             <div className="flex justify-center gap-4 mt-4 md:col-span-2">
             <button
-  onClick={() => {
-    if (guests.length === 0) {
-      alert(" Cannot export. Please add at least one guest first.");
-    } else {
-      exportGuestListPDF();
-    }
-  }}
-  className={`px-4 py-2 rounded text-white ${
-    guests.length === 0
-      ? "bg-gray-400 hover:bg-gray-500"
-      : "bg-blue-500 hover:bg-blue-600"
-  }`}
+           onClick={() => {
+            if (guests.length === 0) {
+            alert(" Cannot export. Please add at least one guest first.");
+            } else {
+            exportGuestListPDF();
+           }
+         }}
+        className={`px-4 py-2 rounded text-white ${
+        guests.length === 0
+           ? "bg-gray-400 hover:bg-gray-500"
+          : "bg-blue-500 hover:bg-blue-600"
+           }`}
 >
-  Export Guest List
-</button>
+         Export Guest List
+       </button>
 
 
             </div>

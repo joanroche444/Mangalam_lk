@@ -22,7 +22,7 @@ function App() {
         <Route path="/create-wedding-project" element={<CreateWeddingProject />} />
         <Route path="/create-schedule/:projectId" element={<WeddingSchedule />} />
         <Route path="/seating" element={<SeatingChart/>} />
-        <Route path="/guest-list" element={<GuestList/>} />
+        <Route path="/guest-list/:projectId" element={<GuestList />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -9,8 +9,10 @@ const MAX_SCHEDULES = 20;
 
 const WeddingSchedule = () => {
   const { projectId } = useParams(); // Get dynamic project ID
+  const navigate = useNavigate();  // Initialize navigate function
   const [itinerary, setItinerary] = useState([]);
 
+  // Fetch schedules from the server
   const fetchSchedules = async () => {
     try {
       const res = await fetch(`http://localhost:5000/api/schedules/${projectId}`);
@@ -27,6 +29,7 @@ const WeddingSchedule = () => {
     }
   };
 
+  // Save new schedule
   const saveSchedule = async (schedule) => {
     await fetch("http://localhost:5000/api/schedules", {
       method: "POST",
@@ -36,6 +39,7 @@ const WeddingSchedule = () => {
     fetchSchedules();
   };
 
+  // Delete schedule
   const deleteSchedule = async (id) => {
     await fetch(`http://localhost:5000/api/schedules/${id}`, {
       method: "DELETE",

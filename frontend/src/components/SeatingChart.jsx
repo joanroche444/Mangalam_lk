@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import * as htmlToImage from "html-to-image";
 import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 const SeatingChart = () => {
   const { projectId } = useParams();
-  const [seats, setSeats] = useState(Array(50).fill(null));
   const [guests, setGuests] = useState([]);
+  const [newGuest, setNewGuest] = useState("");
+  const [seats, setSeats] = useState(Array(50).fill(null));
   const pdfRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const SeatingChart = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/guests/${projectId}`);
       const data = await res.json();
-      setGuests(data); // store full guest objects
+      setGuests(data);
     } catch (err) {
       console.error("Error fetching guests:", err);
     }
@@ -60,53 +61,59 @@ const SeatingChart = () => {
 
   const handleDrop = async (e, index) => {
     e.preventDefault();
-    const guest = e.dataTransfer.getData("text/plain");
+    const guestName = e.dataTransfer.getData("text/plain");
 
-    if (seats.includes(guest)) {
-      alert(`${guest} is already seated.`);
+    if (seats.includes(guestName)) {
+      alert(`${guestName} is already seated.`);
       return;
     }
 
-    const updated = [...seats];
-    updated[index] = guest;
-    setSeats(updated);
-    await assignSeat(index, guest);
+    const updatedSeats = [...seats];
+    updatedSeats[index] = guestName;
+    setSeats(updatedSeats);
+    await assignSeat(index, guestName);
   };
 
   const handleDragOver = (e) => e.preventDefault();
 
-  const generateSeatingChartPDF = () => {
-    if (!pdfRef.current) return;
-    setTimeout(() => {
-      html2canvas(pdfRef.current, {
-        useCORS: true,
-        scale: 2,
-        backgroundColor: "#ffffff",
-      })
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const pdf = new jsPDF();
-          pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
-          pdf.save("seating-chart.pdf");
-        })
-        .catch((err) => {
-          console.error("Error generating PDF:", err);
-          alert("Error generating the PDF.");
-        });
-    }, 500);
+  const handleAddGuest = () => {
+    if (!newGuest.trim()) return;
+    const manualGuest = { name: newGuest, category: "Guest" };
+    setGuests([...guests, manualGuest]);
+    setNewGuest("");
   };
 
-  const generateGuestListPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Guest List Report", 10, 10);
-    guests.forEach((guest, index) => {
-      doc.text(
-        `${index + 1}. ${guest.name} (${guest.category}) - ${guest.contact}, ${guest.email}`,
-        10,
-        20 + index * 10
-      );
-    });
-    doc.save("guest-list.pdf");
+  const downloadAsImage = async () => {
+    try {
+      const dataUrl = await htmlToImage.toPng(pdfRef.current);
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "seating_chart.png";
+      link.click();
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
+  };
+
+  const downloadAsPDF = async () => {
+    try {
+      const dataUrl = await htmlToImage.toPng(pdfRef.current);
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      const imgProps = pdf.getImageProperties(dataUrl);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("seating_chart.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
   };
 
   const tables = Array.from({ length: 12 }, (_, i) =>
@@ -114,7 +121,10 @@ const SeatingChart = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100">
+    <div
+      className="min-h-screen"
+      style={{ background: "linear-gradient(to bottom right, #fce7f3, #ede9fe)" }}
+    >
       <Navbar />
       <div className="p-6">
         <h1 className="text-3xl font-semibold text-[#8d5347] text-center mb-6">
@@ -127,6 +137,21 @@ const SeatingChart = () => {
             <h3 className="text-lg font-semibold mb-2 text-[#8d5347] text-center">
               Guest List
             </h3>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Enter guest name"
+                className="w-full p-2 border rounded mb-2"
+                value={newGuest}
+                onChange={(e) => setNewGuest(e.target.value)}
+              />
+              <button
+                onClick={handleAddGuest}
+                className="w-full bg-[#8d5347] text-white py-1 rounded hover:bg-[#7b463b]"
+              >
+                Add Guest
+              </button>
+            </div>
             <ul>
               {guests.length > 0 ? (
                 guests.map((guest, index) => (
@@ -146,7 +171,7 @@ const SeatingChart = () => {
             </ul>
           </div>
 
-          {/* Tables Layout */}
+          {/* Seating Layout */}
           <div
             className="w-full lg:w-3/4 bg-white p-6 rounded-xl shadow-md"
             ref={pdfRef}
@@ -182,18 +207,18 @@ const SeatingChart = () => {
               ))}
             </div>
 
-            <div className="flex justify-center mt-6 gap-4 flex-wrap">
+            <div className="text-center mt-6">
               <button
-                onClick={generateSeatingChartPDF}
-                className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+                onClick={downloadAsImage}
+                className="bg-[#8d5347] text-white px-4 py-2 rounded hover:bg-[#7b463b] transition mr-4"
               >
-                Export Seating Chart
+                Download Seating Chart as Image
               </button>
               <button
-                onClick={generateGuestListPDF}
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+                onClick={downloadAsPDF}
+                className="bg-[#8d5347] text-white px-4 py-2 rounded hover:bg-[#7b463b] transition"
               >
-                Export Guest List
+                Download Seating Chart as PDF
               </button>
             </div>
           </div>
