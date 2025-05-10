@@ -12,7 +12,10 @@ router.post('/signup', signupUser);
 //get user profile route
 router.get('/:id', getUserByID);
 
+//get all users route
+
+
 //delete user route
-router.delete('/:id', deleteUser);
+router.delete('/delete/:id', deleteUser);
 
 module.exports = router;

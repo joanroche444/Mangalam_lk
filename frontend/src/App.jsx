@@ -9,7 +9,8 @@ import Mangalam from './Mangalam';
 import Register from './pages/Register';
 import Login from './pages/UserLogin';
 import ProfilePage from './pages/ProfilePage';
-
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 
 function App() {
@@ -26,6 +27,11 @@ function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<ProfilePage />} />
+
+        {/* Admin */}
+
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         {/* Add more routes as needed */}
 
       </Routes>

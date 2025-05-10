@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -108,16 +106,7 @@ const Login = () => {
           </div>
 
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="remember"
-                className="w-4 h-4 text-[#9B5D47] focus:ring-[#9B5D47] border-gray-300 rounded"
-              />
-              <label htmlFor="remember" className="ml-2 text-sm text-gray-700">
-                Remember me
-              </label>
-            </div>
+            
             <a href="#" className="text-sm text-[#9B5D47] hover:underline">
               Forgot Password?
             </a>

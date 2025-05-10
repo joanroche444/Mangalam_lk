@@ -20,14 +20,23 @@ export const useLogin = () => {
             const json = await response.json();
 
             if (!response.ok) {
-                throw new Error(json.error || 'Registration failed');
+                throw new Error(json.error || 'Login failed');
             }
 
+            const userData = {
+                email: json.email,
+                firstName: json.firstName,
+                lastName: json.lastName,
+                role: json.role,
+                _id: json._id,
+                token: json.token
+            };
+
             // Save user to local storage
-            localStorage.setItem('user', JSON.stringify(json));
+            localStorage.setItem('user', JSON.stringify(userData));
 
             // Update auth context
-            dispatch({ type: 'LOGIN', payload: json });
+            dispatch({ type: 'LOGIN', payload: userData });
 
             return { success: true };
         } catch (err) {
