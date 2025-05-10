@@ -46,8 +46,9 @@ const ProfilePage = () => {
           lastName: data.user.lastName,
           email: data.user.email,
           phone: data.user.phone || '',
-          weddingDate: data.user.weddingDate ? new Date(data.user.weddingDate).toISOString().split('T')[0] : '',
+          weddingDate: data.user.weddingDate || '',
           location: data.user.location || ''
+   
         });
       } catch (err) {
         toast.error(err.message);
@@ -56,8 +57,32 @@ const ProfilePage = () => {
       }
     };
 
+    
+
     fetchUserData();
   }, [user, navigate]);
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
+    if(confirmed){
+      try {
+        const response = await fetch(`/api/user/delete/${user._id}`, {
+          method: 'DELETE',
+        });
+
+        if(response.ok) {
+          alert('Account deleted successfully');
+          navigate('/signup');
+        }else{
+          const errorData = await response.json();
+          toast.error(errorData.error || 'Failed to delete account');
+        }
+      }catch (error) {
+        console.error('Error deleting account:', error);
+        toast.error('Failed to delete account');
+    }
+  }
+    };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -319,12 +344,12 @@ const ProfilePage = () => {
             </div>
             
             <div className="mt-8 pt-6 border-t border-[#f0d9d3]">
-              <Link 
-                to={`/delete-account/${profileData._id}`}
+              <button 
+                onClick={handleDelete}
                 className="px-4 py-2 bg-[#f0d9d3] text-[#8d5347] rounded-lg hover:bg-[#e0c9c3] transition duration-300 font-medium"
               >
                 Delete Account
-              </Link>
+              </button>
             </div>
           </div>
         </div>

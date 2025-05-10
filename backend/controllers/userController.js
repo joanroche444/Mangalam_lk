@@ -12,19 +12,29 @@ const updateUser = async (req, res) => {
         const { id } = req.params;
         const updates = req.body;
 
-        if (!id){
+        if (!id) {
             return res.status(400).json({ error: 'User ID is required' });
+        }
+
+        // Update the user document
+        const updatedUser = await User.findByIdAndUpdate(id, updates, {
+            new: true,              // return the modified document
+            runValidators: true     // ensure updates match schema
+        }).select('-password');     // exclude password from response
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
         }
 
         res.status(200).json({
             message: 'Profile updated successfully',
-            user
+            user: updatedUser
         });
-    }catch (error) {
+    } catch (error) {
         console.error("Update User Error:", error.message);
         res.status(500).json({ error: 'Server error while updating user' });
     }
-}
+};
 
 //login user
 const loginUser = async (req, res) => {
@@ -122,37 +132,20 @@ const getUserByID = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { password } = req.body; 
-
-        if (!id) {
-            return res.status(400).json({ error: 'User ID is required' });
-        }
-
-        if (!password) {
-            return res.status(400).json({ error: 'Password is required for account deletion' });
-        }
-
-        // First verify the user's password
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Verify password (you'll need to add this method to your User model)
-        const isMatch = await user.verifyPassword(password);
-        if (!isMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        // Delete the user
-        await User.findByIdAndDelete(id);
-
-        res.status(200).json({ message: 'User account deleted successfully' });
+      const userId = req.params.id;
+      // Assuming `User` is the model you are using
+      const user = await User.findByIdAndDelete(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json({ message: 'Account deleted successfully' });
     } catch (error) {
-        console.error("Delete User Error:", error.message);
-        res.status(500).json({ error: 'Server error while deleting user' });
+      console.error(error);
+      res.status(500).json({ message: 'Server error while deleting account' });
     }
-};
+  };
+  
 
 module.exports = {updateUser, loginUser, signupUser, getUserByID, deleteUser };
