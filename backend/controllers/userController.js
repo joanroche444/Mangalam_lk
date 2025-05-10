@@ -133,19 +133,77 @@ const getUserByID = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
       const userId = req.params.id;
-      // Assuming `User` is the model you are using
+
+      if (req.user && req.user._id !== userId) {
+        return res.status(403).json({ message: 'Not authorized to delete this account' });
+      }
+      
+      
+      // Delete the user
       const user = await User.findByIdAndDelete(userId);
   
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
   
+      // Success response
       res.status(200).json({ message: 'Account deleted successfully' });
     } catch (error) {
-      console.error(error);
+      console.error('Delete user error:', error);
       res.status(500).json({ message: 'Server error while deleting account' });
+    }
+  };
+
+  const changeEmail = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { newEmail, password } = req.body;
+      
+      // Validate inputs
+      if (!newEmail || !password) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
+      
+      // Find the user
+      const user = await User.findById(id);
+      
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      
+      // Verify password
+      const isPasswordValid = await user.verifyPassword(password);
+      
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Incorrect password' });
+      }
+      
+      // Check if email is already in use by another user
+      const emailExists = await User.findOne({ email: newEmail });
+      
+      if (emailExists && emailExists._id.toString() !== id) {
+        return res.status(400).json({ error: 'Email is already in use by another account' });
+      }
+      
+      // Update email
+      user.email = newEmail;
+      await user.save();
+      
+      res.status(200).json({
+        message: 'Email updated successfully',
+        user: {
+          _id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role
+        }
+      });
+    } catch (error) {
+      console.error('Change Email Error:', error.message);
+      res.status(500).json({ error: 'Server error while updating email' });
     }
   };
   
 
-module.exports = {updateUser, loginUser, signupUser, getUserByID, deleteUser };
+module.exports = {updateUser, loginUser, signupUser, getUserByID, deleteUser, changeEmail };
