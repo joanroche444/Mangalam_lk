@@ -22,7 +22,7 @@ const SeatingChart = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/guests/${projectId}`);
       const data = await res.json();
-      setGuests(data.map((g) => g.name));
+      setGuests(data); // store full guest objects
     } catch (err) {
       console.error("Error fetching guests:", err);
     }
@@ -55,7 +55,7 @@ const SeatingChart = () => {
   };
 
   const handleDragStart = (e, guest) => {
-    e.dataTransfer.setData("text/plain", guest);
+    e.dataTransfer.setData("text/plain", guest.name);
   };
 
   const handleDrop = async (e, index) => {
@@ -75,7 +75,7 @@ const SeatingChart = () => {
 
   const handleDragOver = (e) => e.preventDefault();
 
-  const generatePDF = () => {
+  const generateSeatingChartPDF = () => {
     if (!pdfRef.current) return;
     setTimeout(() => {
       html2canvas(pdfRef.current, {
@@ -96,8 +96,21 @@ const SeatingChart = () => {
     }, 500);
   };
 
-  const tables = Array.from({ length: 10 }, (_, i) =>
-    seats.slice(i * 5, i * 5 + 5)
+  const generateGuestListPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Guest List Report", 10, 10);
+    guests.forEach((guest, index) => {
+      doc.text(
+        `${index + 1}. ${guest.name} (${guest.category}) - ${guest.contact}, ${guest.email}`,
+        10,
+        20 + index * 10
+      );
+    });
+    doc.save("guest-list.pdf");
+  };
+
+  const tables = Array.from({ length: 12 }, (_, i) =>
+    seats.slice(i * 3, i * 3 + 7)
   );
 
   return (
@@ -105,7 +118,7 @@ const SeatingChart = () => {
       <Navbar />
       <div className="p-6">
         <h1 className="text-3xl font-semibold text-[#8d5347] text-center mb-6">
-          Seating Arrangement (Tables)
+          Seating Arrangements
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -123,7 +136,8 @@ const SeatingChart = () => {
                     onDragStart={(e) => handleDragStart(e, guest)}
                     className="p-2 mb-2 bg-gray-100 hover:bg-gray-200 rounded cursor-pointer text-center"
                   >
-                    {guest}
+                    <p className="font-semibold">{guest.name}</p>
+                    <p className="text-sm text-gray-500">{guest.category}</p>
                   </li>
                 ))
               ) : (
@@ -151,7 +165,7 @@ const SeatingChart = () => {
                   </h4>
                   <div className="flex flex-wrap justify-center gap-3">
                     {tableSeats.map((seat, seatOffset) => {
-                      const seatIndex = tableIndex * 5 + seatOffset;
+                      const seatIndex = tableIndex * 7 + seatOffset;
                       return (
                         <div
                           key={seatIndex}
@@ -168,12 +182,18 @@ const SeatingChart = () => {
               ))}
             </div>
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-6 gap-4 flex-wrap">
               <button
-                onClick={generatePDF}
+                onClick={generateSeatingChartPDF}
                 className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
               >
-                Export as PDF
+                Export Seating Chart
+              </button>
+              <button
+                onClick={generateGuestListPDF}
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+              >
+                Export Guest List
               </button>
             </div>
           </div>
