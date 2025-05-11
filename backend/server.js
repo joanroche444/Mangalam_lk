@@ -6,7 +6,7 @@ const IncomeRoutes = require("./Routes/incomeRoutes");
 const ExpenseRoutes = require("./Routes/expenseRoutes");
 const DashboardRoutes = require("./Routes/dashboardRoutes");
 
-const cors = require('cors');
+
 const corsOptions = require('./config/corsOptions');
 const VendorsRouting = require('./Routes/VendorsRouting'); 
 const userRoutes = require('./Routes/userRoutes')// Adjust the path to your route
