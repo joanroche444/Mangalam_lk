@@ -13,14 +13,25 @@
     "axios": "^1.8.4",
     "formik": "^2.4.6",
     "frontend": "file:",
+
+    "html-to-image": "^1.11.13",
+    "jspdf": "^3.0.1",
+    "lucide-react": "^0.485.0",
+
     "lucide-react": "^0.483.0",
+
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.3.0",
+
+    "swiper": "^11.2.6",
+    "tailwindcss": "^4.0.13"
+
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.0.13",
     "yup": "^1.6.1"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
