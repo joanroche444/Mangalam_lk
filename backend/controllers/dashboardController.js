@@ -49,7 +49,7 @@ exports.getDashboardData = async (req, res) => {
         ].sort((a, b) => b.date - a.date); // Sort latest to first
 
         // Final Response
-       /* res.json({
+        res.json({
             totalBalance:
                 (totalIncome[0]?.total || 0) - (totalExpense[0]?.total || 0),
             totalIncome: totalIncome[0]?.total || 0,
@@ -63,7 +63,7 @@ exports.getDashboardData = async (req, res) => {
                 transactions: last60DaysIncomeTransactions,
             },
             recentTransactions: lastTransactions,
-        });*/
+        });
     } catch (error) {
         console.error("Error fetching dashboard data:", error);
         res.status(500).json({ message: "Server Error", error });

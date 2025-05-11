@@ -15,7 +15,6 @@ export const API_PATHS = {
         ADD_EXPENSE: `${BASE_URL}/api/expense/add`,
         GET_ALL_EXPENSE: `${BASE_URL}/api/expense/get`,
         DELETE_EXPENSE: (expenseId) => `${BASE_URL}/api/expense/${expenseId}`,
-        UPDATE_EXPENSE: (expenseId) => `${BASE_URL}/api/expense/${expenseId}`,
         DOWNLOAD_EXPENSE: `${BASE_URL}/api/expense/downloadexcel`,
     },
 };

@@ -13,7 +13,6 @@ const userRoutes = require('./Routes/userRoutes')// Adjust the path to your rout
 
 
 const app = express();
-const cors = require('cors')
 const port = 5000;
 
 
@@ -29,15 +28,8 @@ mongoose
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
-app.use(cors());
-/*app.use(cors({
-  origin: 'http://localhost:5173/',
-  methods: ['POST', 'GET', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-type', 'Authorization'],
-  credentials: true
-}))/*
 
-// Use the vendor route*/
+// Use the vendor route
 app.use('/api/vendor', VendorsRouting);
 
 app.use('/api/income', IncomeRoutes);
