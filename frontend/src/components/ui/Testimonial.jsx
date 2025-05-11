@@ -1,3 +1,4 @@
+
 export default function Testimonial({ quote, author, image }) {
     return (
       <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-sm border border-[#f8e6d8]">
@@ -11,4 +12,4 @@ export default function Testimonial({ quote, author, image }) {
       </div>
     );
   }
-  
+
