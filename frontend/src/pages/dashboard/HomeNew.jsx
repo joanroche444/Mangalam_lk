@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosinstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import DashboardLayout from "../../layouts/DashboardLayout"; // Ensure this is the correct path
-import InfoCard from "../../components/InfoCard";
+import InfoCard from "../../components/Cards/InfoCard";
 
 import {LuHandCoins, LuWalletMinimal} from "react-icons/lu";
 import {IoMdCard} from "react-icons/io";
