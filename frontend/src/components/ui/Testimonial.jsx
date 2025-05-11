@@ -12,4 +12,4 @@ export default function Testimonial({ quote, author, image }) {
       </div>
     );
   }
-  
+
