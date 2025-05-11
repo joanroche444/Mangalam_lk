@@ -1,10 +1,17 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const VendorsRouting = require('./Routes/VendorsRouting'); // Adjust the path to your route
+ // Adjust the path to your route
 const IncomeRoutes = require("./Routes/incomeRoutes");
 const ExpenseRoutes = require("./Routes/expenseRoutes");
 const DashboardRoutes = require("./Routes/dashboardRoutes");
+
+const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+const VendorsRouting = require('./Routes/VendorsRouting'); 
+const userRoutes = require('./Routes/userRoutes')// Adjust the path to your route
+
+
 const app = express();
 const cors = require('cors')
 const port = 5000;
@@ -32,9 +39,14 @@ app.use(cors());
 
 // Use the vendor route*/
 app.use('/api/vendor', VendorsRouting);
+
 app.use('/api/income', IncomeRoutes);
 app.use('/api/expense', ExpenseRoutes);
 app.use('/api/dashboard', DashboardRoutes);
+
+app.use('/api/user', userRoutes); // Use the user route
+
+
 // Test route to check if server is working
 app.get('/', (req, res) => {
   res.send('Server is running!');
