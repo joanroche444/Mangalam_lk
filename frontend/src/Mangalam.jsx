@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Herosectionlogo from './assets/herosection.jpeg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   Carousel,
   CarouselContent,
