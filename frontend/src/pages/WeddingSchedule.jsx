@@ -106,7 +106,7 @@ const WeddingSchedule = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-100 to-purple-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 to-purple-100">
       <Navbar />
       <div className="flex flex-1">
         <Sidebar />
