@@ -1,9 +1,9 @@
-
 // MangalamPage.jsx
 import React, { useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Herosectionlogo from './assets/herosection.jpeg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from './hooks/useAuthContext'; // Import the auth context
 import { 
   Carousel,
   CarouselContent,
@@ -15,12 +15,26 @@ import Testimonial from './components/ui/Testimonial';
 import Footer from './components/Footer';
 
 const Mangalam = () => {
+  const navigate = useNavigate();
+  const { user } = useAuthContext(); // Get the current user from auth context
+  
   // Refs for scroll animations
   const sectionRefs = {
     planWithEase: useRef(null),
     howItWorks: useRef(null),
     testimonials: useRef(null),
     business: useRef(null)
+  };
+
+  // Handle "Get Started" button click
+  const handleGetStarted = () => {
+    if (user) {
+      // If user is logged in, navigate to the planning dashboard
+      navigate('/dashboard');
+    } else {
+      // If user is not logged in, navigate to signup
+      navigate('/signup');
+    }
   };
 
   // Intersection Observer for scroll animations
@@ -81,13 +95,15 @@ const Mangalam = () => {
           <p className='text-xl text-white mb-8 max-w-2xl animate-fade-in-up delay-300'>
             Everything you need to organize your special day, all in one place.
           </p>
-          <Link
-            to="/signup"
+          
+          {/* Updated Get Started button with click handler */}
+          <button
+            onClick={handleGetStarted}
             className="relative overflow-hidden group bg-[#b06a5d] text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300 animate-fade-in-up delay-500"
           >
             <span className="relative z-10">Get Started</span>
             <span className="absolute inset-0 bg-[#8d5347] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -236,12 +252,13 @@ const Mangalam = () => {
           <p className="text-white text-lg mb-8 max-w-2xl mx-auto">
             Join our platform to connect with couples and showcase your services.
           </p>
-          <Link to='/signup'>
-            <button className="group mt-8 bg-white text-[#b06a5d] px-8 py-4 rounded-md text-lg font-medium hover:bg-gray-100 transition relative overflow-hidden shadow-lg hover:shadow-xl">
-              <span className="relative z-10 group-hover:text-[#8d5347]">Business Portal</span>
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b06a5d] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-            </button>
-          </Link>
+          <button 
+            onClick={() => navigate('/signup')}
+            className="group mt-8 bg-white text-[#b06a5d] px-8 py-4 rounded-md text-lg font-medium hover:bg-gray-100 transition relative overflow-hidden shadow-lg hover:shadow-xl"
+          >
+            <span className="relative z-10 group-hover:text-[#8d5347]">Business Portal</span>
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b06a5d] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+          </button>
         </div>
       </section>
 

@@ -26,31 +26,113 @@ export default function CreateWeddingProject() {
     image: "",
   });
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      navigate('/login', { state: { from: location.pathname } });
+    }
+  }, [navigate, location.pathname]);
+  
   // 🔧 Inline API Helpers
   const fetchProjectById = async (id) => {
-    const res = await fetch("http://localhost:5000/api/projects");
-    const data = await res.json();
-    const found = data.find((p) => p._id === id);
-    if (found) setProjectDetails(found);
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (!user || !user.token) {
+      alert("Please log in to view this project");
+      navigate('/login');
+      return;
+    }
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to fetch project');
+      }
+      
+      const project = await res.json();
+      setProjectDetails(project);
+    } catch (error) {
+      console.error("Error fetching project:", error);
+      alert("Failed to load project: " + error.message);
+    }
   };
 
   const createProject = async (data) => {
-    const res = await fetch("http://localhost:5000/api/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-  
-    return res.json(); // ✅ return the created project object
+    // Get the logged in user from localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (!user || !user.token) {
+      // Handle case where user is not logged in
+      alert("Please log in to create a project");
+      navigate('/login');
+      return null;
+    }
+    
+    // Add the userId to the project data
+    const projectDataWithUser = {
+      ...data,
+      userId: user._id
+    };
+    
+    try {
+      const res = await fetch("http://localhost:5000/api/projects", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.token}` // Add auth token
+        },
+        body: JSON.stringify(projectDataWithUser),
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to create project');
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("Project creation error:", error);
+      alert("Failed to create project: " + error.message);
+      return null;
+    }
   };
   
 
   const updateProject = async (id, data) => {
-    await fetch(`http://localhost:5000/api/projects/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (!user || !user.token) {
+      alert("Please log in to update a project");
+      navigate('/login');
+      return;
+    }
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+        method: "PUT",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to update project');
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("Project update error:", error);
+      alert("Failed to update project: " + error.message);
+    }
   };
 
   useEffect(() => {
@@ -74,15 +156,21 @@ export default function CreateWeddingProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    if (projectId) {
-      await updateProject(projectId, projectDetails);
-      navigate("/dashboard");
-    } else {
-      const newProject = await createProject(projectDetails);
-      const newProjectId = newProject._id;
-  
-      navigate(`/create-schedule/${newProjectId}`); 
-      
+    try {
+      if (projectId) {
+        await updateProject(projectId, projectDetails);
+        navigate("/dashboard");
+      } else {
+        const newProject = await createProject(projectDetails);
+        
+        if (newProject && newProject._id) {
+          const newProjectId = newProject._id;
+          navigate(`/create-schedule/${newProjectId}`);
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting project:", error);
+      alert("There was an error processing your request.");
     }
   };
   

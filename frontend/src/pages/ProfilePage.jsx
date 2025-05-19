@@ -95,6 +95,56 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
+const ProjectCard = ({ project }) => {
+  // Format date function
+  const formatDate = (dateString) => {
+    if (!dateString) return 'No date set';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md p-5 transform transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]">
+      <h3 className="text-xl font-semibold text-[#8d5347] mb-2">{project.name}</h3>
+      <div className="mb-3">
+        <p className="text-[#b06a5d] flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          {formatDate(project.date)}
+        </p>
+        <p className="text-[#b06a5d] flex items-center mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {project.venue || 'No venue set'}
+        </p>
+      </div>
+      <div className="flex justify-between mt-4 pt-3 border-t border-[#f0d9d3]">
+        <span className="text-sm text-[#b06a5d] flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {project.guests || 0} Guests
+        </span>
+        <Link 
+          to={`/project/${project._id}/details`} 
+          className="text-[#b06a5d] hover:text-[#8d5347] font-medium flex items-center"
+        >
+          View Details
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 const ProfilePage = () => {
   const { user, dispatch } = useAuthContext();
   const navigate = useNavigate();
@@ -109,6 +159,9 @@ const ProfilePage = () => {
     weddingDate: '',
     location: ''
   });
+
+  const [projects, setProjects] = useState([]); // State for projects
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
   // Email change states
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -349,6 +402,37 @@ const ProfilePage = () => {
     setIsEditingEmail(false);
   };
 
+  useEffect(() => {
+    const fetchUserProjects = async () => {
+      if (!user) return;
+      
+      try {
+        setIsLoadingProjects(true);
+        
+        const response = await fetch('http://localhost:5000/api/projects/user-projects', {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch projects');
+        }
+        
+        const data = await response.json();
+        setProjects(data);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+        toast.error('Failed to load your projects', toastConfig);
+      } finally {
+        setIsLoadingProjects(false);
+      }
+    };
+    
+    fetchUserProjects();
+  }, [user]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f9efe7]">
@@ -507,25 +591,75 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {/* Quick Links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Link 
-              to="/my-projects" 
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300 transform hover:translate-y-[-2px]"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#f0d9d3] flex items-center justify-center text-[#b06a5d]">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {/* My Projects Section - NEW */}
+          <div className="bg-white rounded-lg shadow-md p-6 mb-8 transform transition-all duration-300 hover:shadow-lg">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-[#f0d9d3]">
+              <h2 className="text-xl font-semibold text-[#8d5347]">My Wedding Projects</h2>
+              <Link 
+                to="/create-project" 
+                className="text-white bg-[#b06a5d] hover:bg-[#8d5347] px-4 py-2 rounded-lg transition duration-300 flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                New Project
+              </Link>
+            </div>
+            
+            {isLoadingProjects ? (
+              <div className="py-8 flex justify-center">
+                <div className="animate-pulse flex space-x-4">
+                  <div className="rounded-full bg-[#f0d9d3] h-10 w-10"></div>
+                  <div className="flex-1 space-y-4 py-1">
+                    <div className="h-4 bg-[#f0d9d3] rounded w-3/4"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-[#f0d9d3] rounded"></div>
+                      <div className="h-4 bg-[#f0d9d3] rounded w-5/6"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="py-8 text-center">
+                <div className="bg-[#f9efe7] rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-[#b06a5d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-[#8d5347]">My Projects</h3>
-                  <p className="text-sm text-[#b06a5d]">View and manage your wedding projects</p>
-                </div>
+                <h3 className="text-lg font-medium text-[#8d5347] mb-2">No projects yet</h3>
+                <p className="text-[#b06a5d] mb-4">Start planning your wedding by creating your first project</p>
+                <Link 
+                  to="/create-project" 
+                  className="inline-block px-6 py-3 bg-[#b06a5d] text-white rounded-lg hover:bg-[#8d5347] transition duration-300"
+                >
+                  Create Your First Project
+                </Link>
               </div>
-            </Link>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {projects.map(project => (
+                  <ProjectCard key={project._id} project={project} />
+                ))}
+              </div>
+            )}
+            
+            {projects.length > 0 && (
+              <div className="mt-4 text-center">
+                <Link 
+                  to="/my-projects" 
+                  className="inline-block text-[#b06a5d] hover:text-[#8d5347] font-medium p-2 transition-colors"
+                >
+                  View All Projects 
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+              </div>
+            )}
+          </div>
 
+          {/* Quick Links - MODIFIED */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Link 
               to="/vendors" 
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300 transform hover:translate-y-[-2px]"
@@ -539,6 +673,23 @@ const ProfilePage = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-[#8d5347]">Vendors</h3>
                   <p className="text-sm text-[#b06a5d]">Manage your selected vendors</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link 
+              to="/budget-tracker" 
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300 transform hover:translate-y-[-2px]"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#f0d9d3] flex items-center justify-center text-[#b06a5d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#8d5347]">Budget Tracker</h3>
+                  <p className="text-sm text-[#b06a5d]">Track your wedding expenses</p>
                 </div>
               </div>
             </Link>

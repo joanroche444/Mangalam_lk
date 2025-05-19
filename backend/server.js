@@ -16,7 +16,7 @@ const userRoutes = require('./Routes/userRoutes')
 const adminRoutes = require('./Routes/adminRoutes') // Adjust the path to your route
 
 
-const projectRoutes = require('./routes/projectRoutes');
+const projectRoutes = require('./Routes/ProjectRoutes');
 const scheduleRoutes = require('./routes/scheduleRoutes');
 const seatingRoutes = require('./routes/seatingRoutes');
 const GuestRoutes = require('./Routes/GuestRoutes');
